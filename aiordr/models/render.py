@@ -20,14 +20,14 @@ __all__ = (
 
 
 class RenderResolution(Enum):
-    SD_480 = "720x480 (30fps)"
+    SD_480 = "720x480"
     SD_960 = "960x540"
-    HD_720 = "1280x720 (60fps)"
-    HD_1080 = "1920x1080 (60fps)"
+    HD_720 = "1280x720"
+    HD_1080 = "1920x1080"
 
 
 class RenderOptions(BaseModel):
-    resolution: RenderResolution = Field(default=RenderResolution.HD_1080)
+    resolution: RenderResolution = Field(default=RenderResolution.HD_720)
     global_volume: int = Field(alias="globalVolume", default=50)
     music_volume: int = Field(alias="musicVolume", default=50)
     hitsound_volume: int = Field(alias="hitsoundVolume", default=50)

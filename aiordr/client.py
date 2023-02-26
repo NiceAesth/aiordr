@@ -77,7 +77,7 @@ class ordrClient:
         self._websocket_url: str = "https://ordr-ws.issou.best"
 
         max_rate, time_period = kwargs.pop("limiter", (1, 300))
-        if (max_rate / time_period) > (10 / 60):
+        if (max_rate / time_period) > 1:
             warn(
                 "You are running at an insanely high rate limit. Doing so may result in your account being banned.",
             )
@@ -142,7 +142,7 @@ class ordrClient:
         async def wrapper(data: dict) -> Any:
             return await func(RenderFinishEvent.parse_obj(data))
 
-        self.socket.on("render_finish_json", wrapper)
+        self.socket.on("render_done_json", wrapper)
         return wrapper
 
     async def __aenter__(self) -> ordrClient:
@@ -363,6 +363,8 @@ class ordrClient:
             raise TypeError("render_options must be a RenderOptions object")
 
         data.update(options.dict(exclude_defaults=True, by_alias=True))
+        data["resolution"] = options.resolution.value
+
         add_param(data, kwargs, "replay_file", "replayFile")
         add_param(data, kwargs, "replay_url", "replayURL")
         add_param(data, kwargs, "custom_skin", "customSkin")
