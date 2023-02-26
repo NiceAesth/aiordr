@@ -4,12 +4,14 @@ This module contains models for renders.
 from __future__ import annotations
 
 from datetime import datetime
+from enum import Enum
 
 from pydantic import Field
 
 from .base import BaseModel
 
 __all__ = (
+    "RenderResolution",
     "RenderOptions",
     "Render",
     "RendersResponse",
@@ -17,8 +19,15 @@ __all__ = (
 )
 
 
+class RenderResolution(Enum):
+    SD_480 = "720x480 (30fps)"
+    SD_960 = "960x540"
+    HD_720 = "1280x720 (60fps)"
+    HD_1080 = "1920x1080 (60fps)"
+
+
 class RenderOptions(BaseModel):
-    resolution: str
+    resolution: RenderResolution = Field(default=RenderResolution.HD_1080)
     global_volume: int = Field(alias="globalVolume", default=50)
     music_volume: int = Field(alias="musicVolume", default=50)
     hitsound_volume: int = Field(alias="hitsoundVolume", default=50)
