@@ -14,7 +14,7 @@ testpaths = ["tests"]
 
 [tool.poetry]
 name = "aiordr"
-version = "0.0.3"
+version = "0.0.4"
 description = "Simple and fast library for interacting with the o!rdr API."
 authors = ["Nice Aesthetics <nice@aesth.dev>"]
 license = "GPLv3+"
