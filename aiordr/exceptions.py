@@ -3,6 +3,8 @@ This module contains custom exception types.
 """
 from __future__ import annotations
 
+from .models import ErrorCode
+
 __all__ = ("APIException",)
 
 
@@ -14,10 +16,10 @@ class APIException(Exception):
     :param message: error message returned
     :type message: str
     :param error_code: error code returned
-    :type error_code: int
+    :type error_code: aiordr.models.errorcode.ErrorCode
     """
 
-    def __init__(self, status: int, message: str, error_code: int) -> None:
+    def __init__(self, status: int, message: str, error_code: ErrorCode) -> None:
         super().__init__(message)
         self.status = status
         self.error_code = error_code

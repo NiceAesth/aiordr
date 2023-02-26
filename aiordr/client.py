@@ -1,6 +1,7 @@
 """This module contains the client for interfacing with the o!rdr API."""
 from __future__ import annotations
 
+import functools
 from typing import Literal
 from typing import TYPE_CHECKING
 from warnings import warn
@@ -13,7 +14,11 @@ from socketio import AsyncClient as sio_async
 from .exceptions import APIException
 from .helpers import add_param
 from .helpers import from_list
+from .models import RenderAddEvent
 from .models import RenderCreateResponse
+from .models import RenderFailEvent
+from .models import RenderFinishEvent
+from .models import RenderProgressEvent
 from .models import RenderServer
 from .models import RendersResponse
 from .models import SkinCompact
@@ -89,46 +94,53 @@ class ordrClient:
     def on_render_added(self, func: Callable) -> Callable:
         r"""Returns a callable that is called when a render is added, to be used as:
         @client.on_render_added()
-        async def render_added(data: dict):
-
-        You can view the data here:
-        https://ordr.issou.best/docs/#section/Websocket
+        async def render_added(event: RenderAddEvent):
         """
-        self.socket.on("render_added_json", func)
-        return func
+
+        @functools.wraps(func)
+        async def wrapper(data: dict) -> Any:
+            return await func(RenderAddEvent.parse_obj(data))
+
+        self.socket.on("render_added_json", wrapper)
+        return wrapper
 
     def on_render_progress(self, func: Callable) -> Callable:
         r"""Returns a callable that is called when a render is updated, to be used as:
         @client.on_render_progress()
-        async def render_progress(data: dict):
-
-        You can view the data here:
-        https://ordr.issou.best/docs/#section/Websocket
+        async def render_progress(event: RenderProgressEvent):
         """
-        self.socket.on("render_progress_json", func)
-        return func
+
+        @functools.wraps(func)
+        async def wrapper(data: dict) -> Any:
+            return await func(RenderProgressEvent.parse_obj(data))
+
+        self.socket.on("render_progress_json", wrapper)
+        return wrapper
 
     def on_render_fail(self, func: Callable) -> Callable:
         r"""Returns a callable that is called when a render fails, to be used as:
         @client.on_render_fail()
-        async def render_fail(data: dict):
-
-        You can view the data here:
-        https://ordr.issou.best/docs/#section/Websocket
+        async def render_fail(event: RenderFailEvent):
         """
-        self.socket.on("render_failed_json", func)
-        return func
+
+        @functools.wraps(func)
+        async def wrapper(data: dict) -> Any:
+            return await func(RenderFailEvent.parse_obj(data))
+
+        self.socket.on("render_fail_json", wrapper)
+        return wrapper
 
     def on_render_finish(self, func: Callable) -> Callable:
         r"""Returns a callable that is called when a render finishes, to be used as:
         @client.on_render_finish()
-        async def render_finish(data: dict):
-
-        You can view the data here:
-        https://ordr.issou.best/docs/#section/Websocket
+        async def render_finish(event: RenderFinishEvent):
         """
-        self.socket.on("render_done_json", func)
-        return func
+
+        @functools.wraps(func)
+        async def wrapper(data: dict) -> Any:
+            return await func(RenderFinishEvent.parse_obj(data))
+
+        self.socket.on("render_finish_json", wrapper)
 
     async def __aenter__(self) -> ordrClient:
         await self.connect()
