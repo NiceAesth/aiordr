@@ -1,6 +1,13 @@
 Models
 ======
 
+Base
+----
+
+.. automodule:: aiordr.models.base
+    :members:
+    :undoc-members:
+
 Renders
 -------
 
@@ -19,5 +26,19 @@ Skins
 -----
 
 .. automodule:: aiordr.models.skin
+    :members:
+    :undoc-members:
+
+Error Codes
+-----------
+
+.. automodule:: aiordr.models.errorcode
+    :members:
+    :undoc-members:
+
+Events
+------
+
+.. automodule:: aiordr.models.events
     :members:
     :undoc-members:
