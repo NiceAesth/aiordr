@@ -90,7 +90,7 @@ Acknowledgments
 
 -  `discord.py <https://github.com/Rapptz/discord.py>`__
    for README formatting
-- `aiosu <https://github.com/NiceAesth/aiosu>`__
+-  `aiosu <https://github.com/NiceAesth/aiosu>`__
    sister library for the osu! API
 
 
