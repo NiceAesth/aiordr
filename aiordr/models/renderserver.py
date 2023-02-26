@@ -40,6 +40,6 @@ class RenderServer(BaseModel):
     avg_upload_time: float = Field(alias="avgUploadTime")
     total_avg_time: float = Field(alias="totalAvgTime")
     total_uploaded_videos_size: int = Field(alias="totalUploadedVideosSize")
-    owner_user_id: int = Field(alias="ownerUserID")
+    owner_user_id: int = Field(alias="ownerUserId")
     owner_username: str = Field(alias="ownerUsername")
     customization: RenderServerOptions

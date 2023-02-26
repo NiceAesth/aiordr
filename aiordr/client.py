@@ -146,6 +146,7 @@ class ordrClient:
         return wrapper
 
     async def __aenter__(self) -> ordrClient:
+        self._session = aiohttp.ClientSession()
         await self.connect()
         return self
 
@@ -191,7 +192,7 @@ class ordrClient:
                     return body.decode("utf-8")
                 raise APIException(415, "Unhandled Content Type", ErrorCode(0))
 
-    async def get_skin(self, skin_id: int) -> SkinCompact:
+    async def get_custom_skin(self, skin_id: int) -> SkinCompact:
         r"""Get custom skin information.
 
         :param skin_id: Skin ID
@@ -386,4 +387,4 @@ class ordrClient:
         """
         if self._session is not None:
             await self._session.close()
-        await self.socket.close()
+        await self.socket.disconnect()
