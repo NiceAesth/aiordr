@@ -9,15 +9,17 @@ from warnings import warn
 import aiohttp
 import orjson
 from aiolimiter import AsyncLimiter
-from socketio import AsyncClient as sio_async
+from socketio import AsyncClient as sio_async  # type: ignore
 
 from .exceptions import APIException
 from .helpers import add_param
 from .helpers import from_list
+from .models import ErrorCode
 from .models import RenderAddEvent
 from .models import RenderCreateResponse
 from .models import RenderFailEvent
 from .models import RenderFinishEvent
+from .models import RenderOptions
 from .models import RenderProgressEvent
 from .models import RenderServer
 from .models import RendersResponse
@@ -141,6 +143,7 @@ class ordrClient:
             return await func(RenderFinishEvent.parse_obj(data))
 
         self.socket.on("render_finish_json", wrapper)
+        return wrapper
 
     async def __aenter__(self) -> ordrClient:
         await self.connect()
@@ -176,16 +179,17 @@ class ordrClient:
                 content_type = get_content_type(resp.headers.get("content-type", ""))
                 if resp.status not in (200, 201):
                     json = orjson.loads(body)
+                    error_code = json.get("errorCode", 0)
                     raise APIException(
                         resp.status,
                         json.get("message", ""),
-                        int(json.get("errorCode", 0)),
+                        ErrorCode(error_code),
                     )
                 if content_type == "application/json":
                     return orjson.loads(body)
                 if content_type == "text/html":
                     return body.decode("utf-8")
-                raise APIException(415, "Unhandled Content Type", None)
+                raise APIException(415, "Unhandled Content Type", ErrorCode(0))
 
     async def get_skin(self, skin_id: int) -> SkinCompact:
         r"""Get custom skin information.
@@ -330,98 +334,13 @@ class ordrClient:
                 Optional, replay file
             * *replay_url* (``str``) --
                 Optional, replay URL, used if replay_file is not provided
-            * *global_volume* (``int``) --
-                Optional, global volume (0-100) (default: 50)
-            * *music_volume* (``int``) --
-                Optional, music volume (0-100) (default: 50)
-            * *hitsound_volume* (``int``) --
-                Optional, hitsound volume (0-100) (default: 50)
-            * *show_hit_error_meter* (``bool``) --
-                Optional, whether to show hit error meter (default: true)
-            * *show_unstable_rate* (``bool``) --
-                Optional, whether to show unstable rate (default: true)
-            * *show_score* (``bool``) --
-                Optional, whether to show score (default: true)
-            * *show_hp_bar* (``bool``) --
-                Optional, whether to show HP bar (default: true)
-            * *show_combo_counter* (``bool``) --
-                Optional, whether to show combo counter (default: true)
-            * *show_pp_counter* (``bool``) --
-                Optional, whether to show PP counter (default: true)
-            * *show_scoreboard* (``bool``) --
-                Optional, whether to show scoreboard (default: false)
-            * *show_borders* (``bool``) --
-                Optional, whether to show playfield borders (default: false)
-            * *show_mods* (``bool``) --
-                Optional, whether to show mod icons (default: true)
-            * *show_result_screen* (``bool``) --
-                Optional, whether to show result screen (default: true)
-            * *use_skin_cursor* (``bool``) --
-                Optional, whether to use skin cursor (default: true)
-            * *use_skin_colors* (``bool``) --
-                Optional, whether to use skin colors (default: false)
-            * *use_skin_hitsounds* (``bool``) --
-                Optional, whether to use skin hitsounds (default: true)
-            * *use_beatmap_colors* (``bool``) --
-                Optional, whether to use beatmap colors (default: true)
-            * *cursor_scale_to_cs* (``bool``) --
-                Optional, whether to scale cursor size to circle size (default: false)
-            * *cursor_rainbow* (``bool``) --
-                Optional, whether to use rainbow cursor (default: false)
-            * *cursor_trail_glow* (``bool``) --
-                Optional, whether to have a glow with the trail (default: false)
-            * *draw_follow_points* (``bool``) --
-                Optional, whether to draw follow points between objects (default: true)
-            * *beat_scaling* (``bool``) --
-                Optional, whether to scale objects to the beat (default: false)
-            * *slider_merge* (``bool``) --
-                Optional, whether to merge sliders (default: false)
-            * *objects_rainbow* (``bool``) --
-                Optional, whether to use rainbow objects (default: false)
-            * *flash_objects* (``bool``) --
-                Optional, whether to flash objects to the beat (default: false)
-            * *use_slider_hitcircle_colors* (``bool``) --
-                Optional, whether sliders should use the hitcircle colors (default: true)
-            * *seizure_warning* (``bool``) --
-                Optional, whether to show a seizure warning (default: false)
-            * *load_video* (``bool``) --
-                Optional, whether to load the video (default: true)
-            * *load_storyboard* (``bool``) --
-                Optional, whether to load the storyboard (default: true)
-            * *intro_bg_dim* (``int``) --
-                Optional, intro background dim (0-100) (default: 0)
-            * *ingame_bg_dim* (``int``) --
-                Optional, ingame background dim (0-100) (default:75)
-            * *break_bg_dim* (``int``) --
-                Optional, break background dim (0-100) (default: 30)
-            * *bg_parallax* (``bool``) --
-                Optional, whether to use background parallax (default: false)
-            * *show_danser_logo* (``bool``) --
-                Optional, whether to show danser logo (default: true)
-            * *skip_intro* (``bool``) --
-                Optional, whether to skip intro (default: true)
-            * *cursor_ripples* (``bool``) --
-                Optional, whether to show cursor ripples (default: false)
-            * *draw_combo_numbers* (``bool``) --
-                Optional, whether to draw combo numbers (default: true)
-            * *slider_snaking_in* (``bool``) --
-                Optional, whether to snake in sliders (default: true)
-            * *slider_snaking_out* (``bool``) --
-                Optional, whether to snake out sliders (default: true)
-            * *show_hit_counter* (``bool``) --
-                Optional, whether to show hit counter (100, 50, miss) below the PP counter (default: false)
-            * *show_key_overlay* (``bool``) --
-                Optional, whether to show key overlay (default: true)
-            * *show_avatars* (``bool``) --
-                Optional, whether to show avatars on scoreboard. May break some skins (default: true)
-            * *show_aim_error_meter* (``bool``) --
-                Optional, whether to show aim error meter (default: false)
-            * *play_nightcore_samples* (``bool``) --
-                Optional, whether to play nightcore samples (default: true)
+            * *render_options* (``aiordr.models.render.RenderOptions``) --
+                Optional, render options
             * *custom_skin* (``bool``) --
                 Optional, whether the provided skin is a custom skin ID (default: false)
 
         :raises: ``aiordr.exceptions.APIException``
+        :raises: ``TypeError``
         :return: Render create response
         :rtype: ``aiordr.models.render.RenderCreateResponse``
         """
@@ -432,58 +351,19 @@ class ordrClient:
         data = {
             "username": username,
             "skin": skin,
-            "resolution": "1280x720",
         }
         if self._verification_key:
             data["verificationKey"] = self._verification_key
+
+        if "render_options" not in kwargs:
+            kwargs["render_options"] = RenderOptions()
+        options: RenderOptions = kwargs["render_options"]
+        if not isinstance(options, RenderOptions):
+            raise TypeError("render_options must be a RenderOptions object")
+
+        data.update(options.dict(exclude_defaults=True, by_alias=True))
         add_param(data, kwargs, "replay_file", "replayFile")
         add_param(data, kwargs, "replay_url", "replayURL")
-        add_param(data, kwargs, "global_volume", "globalVolume")
-        add_param(data, kwargs, "music_volume", "musicVolume")
-        add_param(data, kwargs, "hitsound_volume", "hitsoundVolume")
-        add_param(data, kwargs, "show_hit_error_meter", "showHitErrorMeter")
-        add_param(data, kwargs, "show_unstable_rate", "showUnstableRate")
-        add_param(data, kwargs, "show_score", "showScore")
-        add_param(data, kwargs, "show_hp_bar", "showHPBar")
-        add_param(data, kwargs, "show_combo_counter", "showComboCounter")
-        add_param(data, kwargs, "show_pp_counter", "showPPCounter")
-        add_param(data, kwargs, "show_scoreboard", "showScoreboard")
-        add_param(data, kwargs, "show_borders", "showBorders")
-        add_param(data, kwargs, "show_mods", "showMods")
-        add_param(data, kwargs, "show_result_screen", "showResultScreen")
-        add_param(data, kwargs, "use_skin_cursor", "useSkinCursor")
-        add_param(data, kwargs, "use_skin_colors", "useSkinColors")
-        add_param(data, kwargs, "use_skin_hitsounds", "useSkinHitsounds")
-        add_param(data, kwargs, "use_beatmap_colors", "useBeatmapColors")
-        add_param(data, kwargs, "cursor_scale_to_cs", "cursorScaleToCS")
-        add_param(data, kwargs, "cursor_rainbow", "cursorRainbow")
-        add_param(data, kwargs, "cursor_trail_glow", "cursorTrailGlow")
-        add_param(data, kwargs, "draw_follow_points", "drawFollowPoints")
-        add_param(data, kwargs, "beat_scaling", "scaleToTheBeat")
-        add_param(data, kwargs, "slider_merge", "sliderMerge")
-        add_param(data, kwargs, "objects_rainbow", "objectsRainbow")
-        add_param(data, kwargs, "flash_objects", "objectsFlashToTheBeat")
-        add_param(data, kwargs, "use_slider_hitcircle_colors", "useHitCircleColor")
-        add_param(data, kwargs, "seizure_warning", "seizureWarning")
-        add_param(data, kwargs, "load_storyboard", "loadStoryboard")
-        add_param(data, kwargs, "load_video", "loadVideo")
-        add_param(data, kwargs, "intro_bg_dim", "introBGDim")
-        add_param(data, kwargs, "ingame_bg_dim", "ingameBGDim")
-        add_param(data, kwargs, "break_bg_dim", "breakBGDim")
-        add_param(data, kwargs, "bg_parallax", "BGParallax")
-        add_param(data, kwargs, "show_danser_logo", "showDanserLogo")
-        add_param(data, kwargs, "skip_intro", "skip")
-        add_param(data, kwargs, "cursor_ripples", "cursorRipples")
-        add_param(data, kwargs, "cursor_trail", "cursorTrail")
-        add_param(data, kwargs, "cursor_size", "cursorSize")
-        add_param(data, kwargs, "draw_combo_numbers", "drawComboNumbers")
-        add_param(data, kwargs, "slider_snaking_in", "sliderSnakingIn")
-        add_param(data, kwargs, "slider_snaking_out", "sliderSnakingOut")
-        add_param(data, kwargs, "show_hit_counter", "showHitCounter")
-        add_param(data, kwargs, "show_key_overlay", "showKeyOverlay")
-        add_param(data, kwargs, "show_avatars", "showAvatarsOnScoreboard")
-        add_param(data, kwargs, "show_aim_error_meter", "showAimErrorMeter")
-        add_param(data, kwargs, "play_nightcore_samples", "playNightcoreSamples")
         add_param(data, kwargs, "custom_skin", "customSkin")
         json = await self._request(
             "POST",
