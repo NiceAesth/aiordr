@@ -196,7 +196,7 @@ class ordrClient:
 
         :param skin_id: Skin ID
         :type skin_id: ``int``
-        :raises: ``aiordr.exceptions.APIException``
+        :raises: ``aiordr.exceptions.APIException``: Contains status code, error message, and error code
         :return: Skin information
         :rtype: ``aiordr.models.skin.SkinCompact``
         """
@@ -224,7 +224,7 @@ class ordrClient:
             * *search* (``str``) --
                 Optional, search query
 
-        :raises: ``aiordr.exceptions.APIException``
+        :raises: ``aiordr.exceptions.APIException``: Contains status code, error message, and error code
         :return: Skins
         :rtype: ``aiordr.models.skins.SkinsResponse``
         """
@@ -266,7 +266,7 @@ class ordrClient:
             * *beatmapset_id* (``int``) --
                 Optional, ID of the beatmapset
 
-        :raises: ``aiordr.exceptions.APIException``
+        :raises: ``aiordr.exceptions.APIException``: Contains status code, error message, and error code
         :return: Renders
         :rtype: ``aiordr.models.renders.RendersResponse``
         """
@@ -290,7 +290,7 @@ class ordrClient:
         r"""Get the list of available servers.
 
 
-        :raises: ``aiordr.exceptions.APIException``
+        :raises: ``aiordr.exceptions.APIException``: Contains status code, error message, and error code
         :return: List of servers
         :rtype: ``list[aiordr.models.server.RenderServer]``
         """
@@ -304,7 +304,7 @@ class ordrClient:
         r"""Get the number of online servers.
 
 
-        :raises: ``aiordr.exceptions.APIException``
+        :raises: ``aiordr.exceptions.APIException``: Contains status code, error message, and error code
         :return: Number of online servers
         :rtype: ``int``
         """
@@ -339,8 +339,8 @@ class ordrClient:
             * *custom_skin* (``bool``) --
                 Optional, whether the provided skin is a custom skin ID (default: false)
 
-        :raises: ``aiordr.exceptions.APIException``
-        :raises: ``TypeError``
+        :raises: ``aiordr.exceptions.APIException``: Contains status code, error message, and error code
+        :raises: ``TypeError``: If render_options is not a RenderOptions object
         :return: Render create response
         :rtype: ``aiordr.models.render.RenderCreateResponse``
         """
