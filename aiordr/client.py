@@ -331,7 +331,7 @@ class ordrClient:
             See below
 
         :Keyword Arguments:
-            * *replay_file* (``str``) --
+            * *replay_file* (``typing.IO``) --
                 Optional, replay file
             * *replay_url* (``str``) --
                 Optional, replay URL, used if replay_file is not provided
@@ -365,13 +365,24 @@ class ordrClient:
         data.update(options.dict(exclude_defaults=True, by_alias=True))
         data["resolution"] = options.resolution.value
 
-        add_param(data, kwargs, "replay_file", "replayFile")
         add_param(data, kwargs, "replay_url", "replayURL")
         add_param(data, kwargs, "custom_skin", "customSkin")
+
+        form_data = aiohttp.FormData()
+        for key, value in data.items():
+            form_data.add_field(key, value)
+
+        if "replay_file" in kwargs:
+            form_data.add_field(
+                "replayFile",
+                kwargs["replay_file"],
+                filename="replay.osr",
+            )
+
         json = await self._request(
             "POST",
             f"{self._base_url}/ordr/renders",
-            data=data,
+            data=form_data,
         )
         return RenderCreateResponse.parse_obj(json)
 
