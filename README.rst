@@ -112,6 +112,6 @@ Acknowledgments
 .. |rtd| image:: https://readthedocs.org/projects/aiordr/badge/?version=latest
     :target: https://aiordr.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
-.. |codacy| image:: https://app.codacy.com/project/badge/Grade/9bf211d7e29546dc99cc0b1a3d89b291
-    :target: https://www.codacy.com/gh/NiceAesth/aiosu/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NiceAesth/aiosu&amp;utm_campaign=Badge_Grade
+.. |codacy| image:: https://app.codacy.com/project/badge/Grade/4778d5ee1dc84469ad6a43a6f961c0eb
+    :target: https://www.codacy.com/gh/NiceAesth/aiordr/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NiceAesth/aiordr&amp;utm_campaign=Badge_Grade
     :alt: Codacy Status
