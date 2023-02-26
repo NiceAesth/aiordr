@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     from typing import Callable
 
 
-__all__ = ("ordrClient",)
+__all__ = ("ordrClient", "DeveloperModes")
 
 ClientRequestType = Literal["GET", "POST", "DELETE", "PUT", "PATCH"]
 
@@ -370,6 +370,8 @@ class ordrClient:
 
         form_data = aiohttp.FormData()
         for key, value in data.items():
+            if isinstance(value, bool):
+                value = str(value).lower()
             form_data.add_field(key, value)
 
         if "replay_file" in kwargs:

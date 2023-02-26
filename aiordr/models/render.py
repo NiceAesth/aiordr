@@ -72,7 +72,7 @@ class RenderOptions(BaseModel):
     show_hit_counter: bool = Field(alias="showHitCounter", default=False)
     show_avatars_on_scoreboard: bool = Field(
         alias="showAvatarsOnScoreboard",
-        default=True,
+        default=False,
     )
     show_aim_error_meter: bool = Field(alias="showAimErrorMeter", default=False)
     play_nightcore_samples: bool = Field(alias="playNightcoreSamples", default=True)
