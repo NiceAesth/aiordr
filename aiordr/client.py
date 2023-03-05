@@ -49,6 +49,16 @@ DeveloperModes = Literal["devmode_success", "devmode_fail", "devmode_wsfail"]
 
 
 class ordrClient:
+    __slots__ = (
+        "_developer_mode",
+        "_verification_key",
+        "_session",
+        "_base_url",
+        "_websocket_url",
+        "_limiter",
+        "socket",
+    )
+
     def __init__(self, **kwargs: Any) -> None:
         r"""o!rdr API client.
         :param \**kwargs:
