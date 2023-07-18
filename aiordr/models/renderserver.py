@@ -17,7 +17,7 @@ __all__ = (
 
 class RenderServerOptions(BaseModel):
     text_color: str = Field(alias="textColor")
-    background_type: str = Field(alias="backgroundType")
+    background_type: int = Field(alias="backgroundType")
 
 
 class RenderServer(BaseModel):

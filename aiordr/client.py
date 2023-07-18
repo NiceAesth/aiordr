@@ -111,7 +111,7 @@ class ordrClient:
 
         @functools.wraps(func)
         async def wrapper(data: dict) -> Any:
-            return await func(RenderAddEvent.parse_obj(data))
+            return await func(RenderAddEvent.model_validate(data))
 
         self.socket.on("render_added_json", wrapper)
         return wrapper
@@ -124,7 +124,7 @@ class ordrClient:
 
         @functools.wraps(func)
         async def wrapper(data: dict) -> Any:
-            return await func(RenderProgressEvent.parse_obj(data))
+            return await func(RenderProgressEvent.model_validate(data))
 
         self.socket.on("render_progress_json", wrapper)
         return wrapper
@@ -137,7 +137,7 @@ class ordrClient:
 
         @functools.wraps(func)
         async def wrapper(data: dict) -> Any:
-            return await func(RenderFailEvent.parse_obj(data))
+            return await func(RenderFailEvent.model_validate(data))
 
         self.socket.on("render_fail_json", wrapper)
         return wrapper
@@ -150,7 +150,7 @@ class ordrClient:
 
         @functools.wraps(func)
         async def wrapper(data: dict) -> Any:
-            return await func(RenderFinishEvent.parse_obj(data))
+            return await func(RenderFinishEvent.model_validate(data))
 
         self.socket.on("render_done_json", wrapper)
         return wrapper
@@ -217,7 +217,7 @@ class ordrClient:
             f"{self._base_url}/ordr/skins/custom",
             params=params,
         )
-        return SkinCompact.parse_obj(json)
+        return SkinCompact.model_validate(json)
 
     async def get_skins(
         self, page: int = 1, page_size: int = 5, **kwargs: Any
@@ -249,7 +249,7 @@ class ordrClient:
             f"{self._base_url}/ordr/skins",
             params=params,
         )
-        return SkinsResponse.parse_obj(json)
+        return SkinsResponse.model_validate(json)
 
     async def get_render_list(
         self, page: int = 1, page_size: int = 5, **kwargs: Any
@@ -295,7 +295,7 @@ class ordrClient:
             "GET",
             f"{self._base_url}/ordr/renders",
         )
-        return RendersResponse.parse_obj(json)
+        return RendersResponse.model_validate(json)
 
     async def get_server_list(self) -> list[RenderServer]:
         r"""Get the list of available servers.
@@ -307,9 +307,9 @@ class ordrClient:
         """
         json = await self._request(
             "GET",
-            f"{self._base_url}/servers",
+            f"{self._base_url}/ordr/servers",
         )
-        return from_list(RenderServer.parse_obj, json.get("servers", []))
+        return from_list(RenderServer.model_validate, json.get("servers", []))
 
     async def get_server_online_count(self) -> int:
         r"""Get the number of online servers.
@@ -321,7 +321,7 @@ class ordrClient:
         """
         data = await self._request(
             "GET",
-            f"{self._base_url}/servers/onlinecount",
+            f"{self._base_url}/ordr/servers/onlinecount",
         )
         try:
             return int(data)
@@ -372,7 +372,7 @@ class ordrClient:
         if not isinstance(options, RenderOptions):
             raise TypeError("render_options must be a RenderOptions object")
 
-        data.update(options.dict(exclude_defaults=True, by_alias=True))
+        data.update(options.model_dump(exclude_defaults=True, by_alias=True))
         data["resolution"] = options.resolution.value
 
         add_param(data, kwargs, "replay_url", "replayURL")
@@ -396,7 +396,7 @@ class ordrClient:
             f"{self._base_url}/ordr/renders",
             data=form_data,
         )
-        return RenderCreateResponse.parse_obj(json)
+        return RenderCreateResponse.model_validate(json)
 
     async def connect(self) -> None:
         r"""Connects to the websocket server.
