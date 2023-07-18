@@ -169,7 +169,7 @@ class ordrClient:
         await self.close()
 
     async def _request(
-        self, request_type: ClientRequestType, *args: Any, **kwargs: Any
+        self, request_type: ClientRequestType, *args: Any, **kwargs: Any,
     ) -> Any:
         if not self.socket.connected:
             await self.connect()
@@ -220,7 +220,7 @@ class ordrClient:
         return SkinCompact.parse_obj(json)
 
     async def get_skins(
-        self, page: int = 1, page_size: int = 5, **kwargs: Any
+        self, page: int = 1, page_size: int = 5, **kwargs: Any,
     ) -> SkinsResponse:
         r"""Get custom skins.
 
@@ -252,7 +252,7 @@ class ordrClient:
         return SkinsResponse.parse_obj(json)
 
     async def get_render_list(
-        self, page: int = 1, page_size: int = 5, **kwargs: Any
+        self, page: int = 1, page_size: int = 5, **kwargs: Any,
     ) -> RendersResponse:
         r"""Get render list.
 
@@ -329,7 +329,7 @@ class ordrClient:
             return 0
 
     async def create_render(
-        self, username: str, skin: Union[str, int], **kwargs: Any
+        self, username: str, skin: Union[str, int], **kwargs: Any,
     ) -> RenderCreateResponse:
         r"""Create a render.
 
