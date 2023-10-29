@@ -416,6 +416,7 @@ class ordrClient:
         :return: None
         """
         await self.socket.connect(url=self._websocket_url)
+        await self.socket.wait()
 
     async def close(self) -> None:
         r"""Closes the client.
