@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     from typing import Callable
 
 
-__all__ = ("ordrClient", "DeveloperModes")
+__all__ = ("DeveloperModes", "ordrClient")
 
 ClientRequestType = Literal["GET", "POST", "DELETE", "PUT", "PATCH"]
 
