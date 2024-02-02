@@ -1,7 +1,6 @@
 """
 This module contains o!rdr API Error Codes.
 """
-
 from __future__ import annotations
 
 from enum import IntEnum
