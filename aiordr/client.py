@@ -54,7 +54,6 @@ class ordrClient:
         "_verification_key",
         "_session",
         "_base_url",
-        "_websocket_url",
         "_limiter",
         "socket",
     )
@@ -84,7 +83,6 @@ class ordrClient:
 
         self._session: Optional[aiohttp.ClientSession] = None
         self._base_url: str = "https://apis.issou.best"
-        self._websocket_url: str = "https://ordr-ws.issou.best"
 
         max_rate, time_period = kwargs.pop("limiter", (1, 300))
         if (max_rate / time_period) > 1:
@@ -415,7 +413,7 @@ class ordrClient:
 
         :return: None
         """
-        await self.socket.connect(url=self._websocket_url)
+        await self.socket.connect(url=self._base_url, socketio_path="/ordr/ws")
 
     async def close(self) -> None:
         r"""Closes the client.
