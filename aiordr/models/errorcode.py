@@ -1,6 +1,7 @@
 """
 This module contains o!rdr API Error Codes.
 """
+
 from __future__ import annotations
 
 from enum import IntEnum
@@ -45,3 +46,5 @@ class ErrorCode(IntEnum):
     MAPPER_BANNED = 31
     BEATMAPSET_BANNED = 32
     REPLAY_RECENT_FAIL = 33
+    INVALID_REPLAY_URL = 34
+    FIELD_MISSING = 35
