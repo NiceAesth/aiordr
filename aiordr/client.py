@@ -1,5 +1,4 @@
 """This module contains the client for interfacing with the o!rdr API."""
-
 from __future__ import annotations
 
 import functools
