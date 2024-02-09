@@ -1,4 +1,5 @@
 """This module contains the client for interfacing with the o!rdr API."""
+
 from __future__ import annotations
 
 import functools
@@ -164,7 +165,7 @@ class ordrClient:
         exc: Optional[BaseException],
         traceback: Optional[TracebackType],
     ) -> None:
-        await self.close()
+        await self.aclose()
 
     async def _request(
         self,
@@ -415,7 +416,7 @@ class ordrClient:
         """
         await self.socket.connect(url=self._base_url, socketio_path="/ordr/ws")
 
-    async def close(self) -> None:
+    async def aclose(self) -> None:
         r"""Closes the client.
 
         :return: None
@@ -423,3 +424,14 @@ class ordrClient:
         if self._session is not None:
             await self._session.close()
         await self.socket.disconnect()
+
+    async def close(self) -> None:
+        r"""Closes the client. (Deprecated)
+
+        :return: None
+        """
+        warn(
+            "close is deprecated, use aclose instead. Will be removed on 2024-03-01",
+            DeprecationWarning,
+        )
+        await self.aclose()

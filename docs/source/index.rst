@@ -30,7 +30,9 @@ If you need assistance, you should look here:
 Breaking changes
 ----------------
 
-**v2.0.0:** The library now uses *Pydantic v2*. This means that the following changes have occured:
+**v0.2.2:** The `close()` method of the client is now named `aclose()` as per naming conventions for asynchronous methods. The old method is still available with a deprecation warning, but will be removed on 2024-03-01.
+
+**v0.1.0:** The library now uses *Pydantic v2*. This means that the following changes have occured:
 
 - The *dict* method has been renamed to *model_dump*
 - The *json* method has been renamed to *model_dump_json*
