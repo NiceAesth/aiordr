@@ -1,4 +1,4 @@
-from __future__ import annotations
+# isort: dont-add-imports
 
 from datetime import date
 from importlib import metadata
