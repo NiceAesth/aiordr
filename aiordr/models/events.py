@@ -1,6 +1,7 @@
 """
 This module contains models for websocket events.
 """
+
 from __future__ import annotations
 
 from pydantic import Field

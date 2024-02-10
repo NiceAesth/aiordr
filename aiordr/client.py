@@ -1,9 +1,10 @@
 """This module contains the client for interfacing with the o!rdr API."""
+
 from __future__ import annotations
 
 import functools
-from typing import Literal
 from typing import TYPE_CHECKING
+from typing import Literal
 from warnings import warn
 
 import aiohttp
@@ -29,10 +30,10 @@ from .models import SkinsResponse
 if TYPE_CHECKING:
     from types import TracebackType
     from typing import Any
+    from typing import Callable
+    from typing import Optional
     from typing import Type
     from typing import Union
-    from typing import Optional
-    from typing import Callable
 
 
 __all__ = ("DeveloperModes", "ordrClient")

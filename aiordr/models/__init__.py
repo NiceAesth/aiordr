@@ -1,6 +1,6 @@
 """This module contains models for the o!rdr API."""
+
 # isort: dont-add-imports
-from __future__ import annotations
 
 from .base import *
 from .errorcode import *

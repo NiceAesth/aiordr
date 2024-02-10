@@ -9,6 +9,11 @@ check_untyped_defs = true
 warn_unused_ignores = true
 show_error_codes = true
 
+[tool.isort]
+add_imports = ["from __future__ import annotations"]
+force_single_line = true
+profile = "black"
+
 [tools.pytest.ini_options]
 testpaths = ["tests"]
 
@@ -25,7 +30,7 @@ keywords = ["osu!", "osu", "api"]
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "Typing :: Typed"
+    "Typing :: Typed",
 ]
 include = ["py.typed"]
 
@@ -35,14 +40,14 @@ aiohttp = "^3.8.3"
 aiolimiter = "^1.0.0"
 orjson = "^3.8.3"
 pydantic = "^2.0.3"
-pytest = {version="^7.2.0", optional = true}
-pytest-asyncio = {version="^0.23.0", optional = true}
-pytest-mock = {version="^3.10.0", optional = true}
-toml = {version="^0.10.2", optional = true}
-sphinx = {version="^7.0.0", optional = true}
-furo = {version="^2023.5.20", optional = true}
-types-toml = {version = "^0.10.8.1", optional = true}
-python-socketio = {extras = ["asyncio-client"], version = "^5.7.2"}
+pytest = { version = "^7.2.0", optional = true }
+pytest-asyncio = { version = "^0.23.0", optional = true }
+pytest-mock = { version = "^3.10.0", optional = true }
+toml = { version = "^0.10.2", optional = true }
+sphinx = { version = "^7.0.0", optional = true }
+furo = { version = "^2023.5.20", optional = true }
+types-toml = { version = "^0.10.8.1", optional = true }
+python-socketio = { extras = ["asyncio-client"], version = "^5.7.2" }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
@@ -54,7 +59,7 @@ types-toml = "^0.10.8.1"
 sphinx = "^7.0.0"
 furo = "^2023.5.20"
 pytest-cov = "^4.0.0"
-black = {version = "^23.0.0", allow-prereleases = true}
+black = { version = "^23.0.0", allow-prereleases = true }
 pre-commit = "^3.2.2"
 
 [tool.poetry.extras]
