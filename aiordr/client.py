@@ -424,14 +424,3 @@ class ordrClient:
         if self._session is not None:
             await self._session.close()
         await self.socket.disconnect()
-
-    async def close(self) -> None:
-        r"""Closes the client. (Deprecated)
-
-        :return: None
-        """
-        warn(
-            "close is deprecated, use aclose instead. Will be removed on 2024-03-01",
-            DeprecationWarning,
-        )
-        await self.aclose()
