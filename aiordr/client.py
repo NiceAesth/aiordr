@@ -28,12 +28,9 @@ from .models import SkinCompact
 from .models import SkinsResponse
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from types import TracebackType
     from typing import Any
-    from typing import Callable
-    from typing import Optional
-    from typing import Type
-    from typing import Union
 
 
 __all__ = ("DeveloperModes", "ordrClient")
@@ -72,8 +69,8 @@ class ordrClient:
             * *limiter* (``tuple[int, int]``) --
                 Optional, rate limit, defaults to (1, 300) (1 requests per 5 minutes)
         """
-        self._developer_mode: Optional[str] = kwargs.pop("developer_mode", None)
-        self._verification_key: Optional[str] = kwargs.pop("verification_key", None)
+        self._developer_mode: str | None = kwargs.pop("developer_mode", None)
+        self._verification_key: str | None = kwargs.pop("verification_key", None)
 
         if self._developer_mode:
             if self._verification_key:
@@ -82,7 +79,7 @@ class ordrClient:
                 )
             self._verification_key = self._developer_mode
 
-        self._session: Optional[aiohttp.ClientSession] = None
+        self._session: aiohttp.ClientSession | None = None
         self._base_url: str = "https://apis.issou.best"
 
         max_rate, time_period = kwargs.pop("limiter", (1, 300))
@@ -161,9 +158,9 @@ class ordrClient:
 
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc: Optional[BaseException],
-        traceback: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        traceback: TracebackType | None,
     ) -> None:
         await self.aclose()
 
@@ -339,7 +336,7 @@ class ordrClient:
     async def create_render(
         self,
         username: str,
-        skin: Union[str, int],
+        skin: str | int,
         **kwargs: Any,
     ) -> RenderCreateResponse:
         r"""Create a render.
