@@ -18,9 +18,7 @@ sys.path.insert(0, os.path.abspath("../../aiordr/"))
 project = "aiordr"
 author = "Nice Aesthetics"
 project_copyright = f"{date.today().year}, {author}"
-release = toml.load(os.path.abspath("../../pyproject.toml"))["tool"]["poetry"][
-    "version"
-]
+release = toml.load(os.path.abspath("../../pyproject.toml"))["project"]["version"]
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
