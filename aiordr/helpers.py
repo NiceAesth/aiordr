@@ -7,9 +7,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from typing import Any
-    from typing import Callable
-    from typing import Optional
     from typing import TypeVar
 
     T = TypeVar("T")
@@ -40,8 +39,8 @@ def add_param(
     params: dict[str, Any],
     kwargs: dict[str, Any],
     key: str,
-    param_name: Optional[str] = None,
-    converter: Optional[Callable[[Any], T]] = None,
+    param_name: str | None = None,
+    converter: Callable[[Any], T] | None = None,
 ) -> bool:
     r"""Adds a parameter to a dictionary if it exists in kwargs.
 
