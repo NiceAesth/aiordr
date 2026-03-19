@@ -18,7 +18,7 @@ Features
 Installing
 ----------
 
-**Python 3.9 or higher is required**
+**Python 3.10 or higher is required**
 
 To install the library, simply run the following commands
 
